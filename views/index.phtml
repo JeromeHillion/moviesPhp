@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <title>Movies</title>
+</head>
+<body>
+<div class="container">
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+            <form class="d-flex col-sm">
+                <input id="book" class="form-control me-2" type="search" placeholder="Rechercher..."
+                       aria-label="Rechercher">
+                <button id="btn_search" class="btn btn-outline-success" type="submit">Rechercher</button>
+            </form>
+        </div>
+    </nav>
+
+    <div id="result" class="row row-cols-1  g-4">
+
+    </div>
+
+    <script>
+
+
+        let btn_search = document.getElementById('btn_search');
+
+        btn_search.addEventListener("click", function (event) {
+            event.preventDefault();
+            let book = document.getElementById('book').value;
+            fetch('https://api.themoviedb.org/3/search/movie?api_key=ddec886742429cd922ebad0010e96c2d&language=fr-FR&query=' + book).then(function (response) {
+
+                response.json().then(function (data) {
+                    data.results.forEach(function (book) {
+                        console.log(book);
+                        let result = document.querySelector('#result');
+                        let col = document.createElement("div");
+                        let card = document.createElement("div");
+                        let img_card = document.createElement("img");
+                        let card_body = document.createElement("div");
+                        let h5 = document.createElement("h5");
+                        let release_date = document.createElement("p");
+                        let vote_average = document.createElement("cite");
+                        let btn_info = document.createElement("a");
+                        img_card.src = "https://image.tmdb.org/t/p/w185" + book.poster_path;
+                        col.classList.add('col-2');
+                        card.classList.add('card');
+                        /*img_card.classList.add('card-img-top');*/
+                        card_body.classList.add('card-body');
+                        h5.classList.add('card-title', 'fs-6');
+                        release_date.classList.add('card-texte');
+                        vote_average.classList.add( 'me-2');
+                        btn_info.classList.add('btn', 'btn-info');
+                        h5.innerHTML = book.title;
+                        release_date.innerHTML = book.release_date;
+                        vote_average.innerHTML = book.vote_average;
+                        btn_info.innerText = 'Voir';
+                        result.appendChild(col);
+                        col.appendChild(card);
+                        card.appendChild(img_card);
+                        card.appendChild(card_body);
+                        card_body.appendChild(h5);
+                        card_body.appendChild(release_date);
+                        card_body.appendChild(vote_average);
+                        card_body.appendChild(btn_info);
+
+
+                    })
+                });
+
+
+            });
+        });
+
+    </script>
+</body>
+
+</html>
